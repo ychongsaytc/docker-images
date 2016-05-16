@@ -1,0 +1,10 @@
+
+version: '2'
+services:
+
+    app_xware:
+        build: "./app_xware"
+        volumes:
+            - "./downloads/xware/:/TDDOWNLOAD/"
+        restart: "always"
+
