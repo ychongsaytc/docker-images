@@ -1,0 +1,42 @@
+
+version: '2'
+services:
+
+    nginx:
+        image: "nginx:latest"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/nginx/:/etc/nginx/"
+            - "./log/nginx/:/var/log/nginx/"
+            - "./app_php/www/:/var/www/html/"
+        links:
+            - "app_php"
+        command: "nginx -g 'daemon off;'"
+        restart: "always"
+
+    app_php:
+        build: "./app_php"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/php-fpm/:/etc/php-fpm.d/"
+            - "./log/php-fpm/:/var/log/php-fpm/"
+            - "./app_php/www/:/var/www/html/"
+        links:
+            - "app_mysql"
+        command: "php-fpm --nodaemonize"
+        restart: "always"
+
+    app_mysql:
+        image: "mysql:latest"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/mysql:/etc/mysql"
+            - "./log/mysql/:/var/log/mysql/"
+            - "./app_mysql/data/:/var/lib/mysql/"
+        environment:
+            MYSQL_ROOT_PASSWORD: "root"
+        restart: "always"
+
