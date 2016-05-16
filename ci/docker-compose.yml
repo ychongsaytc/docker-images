@@ -1,0 +1,33 @@
+
+version: '2'
+services:
+
+    jenkins:
+        image: "jenkins:latest"
+        ports:
+            - "8080:8080"
+            - "50000:50000"
+        volumes:
+            - "./app/jenkins/:/var/jenkins_home/"
+
+    gitlab:
+        image: "gitlab/gitlab-ce:latest"
+        ports:
+            - "22:22"
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "./config/gitlab/:/etc/gitlab/"
+            - "./log/gitlab/:/var/log/gitlab/"
+            - "./app_git/gitlab/:/var/opt/gitlab/"
+        environment:
+            GITLAB_OMNIBUS_CONFIG: |
+                external_url 'https://git.example.com'
+                gitlab_rails['time_zone']      = 'Asia/Shanghai'
+                gitlab_rails['smtp_address']   = 'smtp.gmail.com'
+                gitlab_rails['smtp_port']      = 587
+                gitlab_rails['smtp_user_name'] = 'user@gmail.com'
+                gitlab_rails['smtp_password']  = 'password'
+                gitlab_rails['smtp_domain']    = 'gmail.com'
+                gitlab_rails['smtp_tls']       = true
+
