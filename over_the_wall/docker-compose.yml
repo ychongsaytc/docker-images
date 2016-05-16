@@ -1,0 +1,36 @@
+
+version: '2'
+services:
+
+    shadowsocks:
+        image: "easypi/shadowsocks-libev"
+        environment:
+            SERVER_ADDR: "0.0.0.0"
+            SERVER_PORT: "8388"
+            METHOD: "aes-256-cfb"
+            PASSWORD: "password"
+            DNS_ADDR: "8.8.8.8"
+            TIMEOUT: 300
+        network_mode: "host"
+        restart: "always"
+
+    dnscrypt:
+        image: "mengbo/docker-dnscrypt-wrapper"
+        environment:
+            LISTEN_ADDRESS: "0.0.0.0"
+            LISTEN_PORT: "5353"
+            RESOLVER_ADDRESS: "8.8.8.8"
+            RESOLVER_PORT: "53"
+            PROVIDER_NAME: "2.dnscrypt-cert.example.com"
+        network_mode: "host"
+        restart: "always"
+
+    ikev2:
+        build: "./ikev2"
+        environment:
+            SHARED_SECRET: "password"
+            RESOLVER_ADDR_LIST: "8.8.8.8, 8.8.4.4"
+        privileged: true
+        network_mode: "host"
+        restart: "always"
+
