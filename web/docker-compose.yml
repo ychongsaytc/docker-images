@@ -33,7 +33,7 @@ services:
         image: "mysql:latest"
         volumes:
             - "/tmp/:/tmp/"
-            - "./config/mysql:/etc/mysql"
+            - "./config/mysql/:/etc/mysql/"
             - "./log/mysql/:/var/log/mysql/"
             - "./app_mysql/data/:/var/lib/mysql/"
         environment:
