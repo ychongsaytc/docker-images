@@ -26,6 +26,7 @@ services:
             - "./app_php/www/:/var/www/html/"
         links:
             - "app_mysql"
+            - "app_postgres"
         command: "php-fpm --nodaemonize"
         restart: "always"
 
@@ -38,5 +39,17 @@ services:
             - "./app_mysql/data/:/var/lib/mysql/"
         environment:
             MYSQL_ROOT_PASSWORD: "root"
+        restart: "always"
+
+    app_postgres:
+        image: "postgres:latest"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/postgres/:/etc/postgres/"
+            - "./log/postgres/:/var/log/postgresql/"
+            - "./app_postgres/data/:/var/lib/postgresql/data/"
+        environment:
+            POSTGRES_USER: "root"
+            POSTGRES_PASSWORD: "root"
         restart: "always"
 
