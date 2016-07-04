@@ -2,8 +2,8 @@
 version: '2'
 services:
 
-    nginx:
-        image: "nginx:latest"
+    app_nginx:
+        build: "./app_nginx"
         ports:
             - "80:80"
             - "443:443"
