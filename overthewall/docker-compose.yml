@@ -16,6 +16,8 @@ services:
 
     dnscrypt:
         image: "mengbo/docker-dnscrypt-wrapper"
+        volumes:
+            - "./app_dnscrypt/data/:/usr/local/share/dnscrypt-wrapper/"
         environment:
             LISTEN_ADDRESS: "0.0.0.0"
             LISTEN_PORT: "5353"
