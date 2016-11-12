@@ -3,15 +3,17 @@ version: '2'
 services:
 
     shadowsocks:
-        image: "easypi/shadowsocks-libev"
+        build: "./shadowsocks"
+        ports:
+            - "8388:8388/tcp"
+            - "8388:8388/udp"
         environment:
             SERVER_ADDR: "0.0.0.0"
             SERVER_PORT: "8388"
-            METHOD: "aes-256-cfb"
             PASSWORD: "password"
-            DNS_ADDR: "8.8.8.8"
+            METHOD: "aes-256-cfb"
             TIMEOUT: 300
-        network_mode: "host"
+            WORKERS: 10
         restart: "always"
 
     dnscrypt:
