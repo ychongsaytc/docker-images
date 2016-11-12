@@ -29,12 +29,27 @@ services:
         network_mode: "host"
         restart: "always"
 
-    ikev2:
-        build: "./ikev2"
+    ipsec:
+        build: "./ipsec"
         environment:
+            REMOTE_ID: "vpn"
             SHARED_SECRET: "password"
-            RESOLVER_ADDR_LIST: "8.8.8.8, 8.8.4.4"
+            CLIENT_NAME: "vpn"
+            PASSWORD: "password"
+            DNS_ADDR_1: "8.8.8.8"
+            DNS_ADDR_2: "8.8.4.4"
         privileged: true
         network_mode: "host"
         restart: "always"
+
+    # ikev2:
+        # build: "./ikev2"
+        # environment:
+            # REMOTE_ID: "vpn"
+            # SHARED_SECRET: "password"
+            # DNS_ADDR_1: "8.8.8.8"
+            # DNS_ADDR_2: "8.8.4.4"
+        # privileged: true
+        # network_mode: "host"
+        # restart: "always"
 
