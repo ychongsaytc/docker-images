@@ -3,7 +3,7 @@ version: '2'
 services:
 
     app_nginx:
-        build: "./app_nginx"
+        image: "nginx:latest"
         ports:
             - "80:80"
             - "443:443"
@@ -11,7 +11,7 @@ services:
             - "/tmp/:/tmp/"
             - "./config/nginx/:/etc/nginx/"
             - "./log/nginx/:/var/log/nginx/"
-            - "./app_php/www/:/var/www/html/"
+            - "./www/:/var/www/html/"
         links:
             - "app_php"
         command: "nginx -g 'daemon off;'"
@@ -23,7 +23,7 @@ services:
             - "/tmp/:/tmp/"
             - "./config/php-fpm/:/etc/php-fpm.d/"
             - "./log/php-fpm/:/var/log/php-fpm/"
-            - "./app_php/www/:/var/www/html/"
+            - "./www/:/var/www/html/"
         links:
             - "app_mysql"
             - "app_postgres"
@@ -36,7 +36,7 @@ services:
             - "/tmp/:/tmp/"
             - "./config/mysql/:/etc/mysql/"
             - "./log/mysql/:/var/log/mysql/"
-            - "./app_mysql/data/:/var/lib/mysql/"
+            - "./db/mysql/:/var/lib/mysql/"
         environment:
             MYSQL_ROOT_PASSWORD: "root"
         restart: "always"
@@ -47,7 +47,7 @@ services:
             - "/tmp/:/tmp/"
             - "./config/postgres/:/etc/postgres/"
             - "./log/postgres/:/var/log/postgresql/"
-            - "./app_postgres/data/:/var/lib/postgresql/data/"
+            - "./db/postgres/data/:/var/lib/postgresql/data/"
         environment:
             POSTGRES_USER: "root"
             POSTGRES_PASSWORD: "root"
