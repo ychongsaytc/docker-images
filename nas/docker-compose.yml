@@ -2,6 +2,12 @@
 version: '2'
 services:
 
+    app_cron:
+        build: "./app_cron"
+        volumes:
+            - "./cron/:/cron/"
+        restart: "always"
+
     app_xware:
         build: "./app_xware"
         volumes:
