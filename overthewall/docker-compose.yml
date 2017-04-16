@@ -16,6 +16,22 @@ services:
             WORKERS: 10
         restart: "always"
 
+    shadowsocksr:
+        build: "./shadowsocksr"
+        ports:
+            - "8488:8488/tcp"
+            - "8488:8488/udp"
+        environment:
+            SERVER_ADDR: "0.0.0.0"
+            SERVER_PORT: "8488"
+            PASSWORD: "password"
+            METHOD: "aes-256-cfb"
+            OBFS: "http_simple"
+            TIMEOUT: 300
+            WORKERS: 10
+            PROTOCOL: "auth_sha1_v4"
+        restart: "always"
+
     dnscrypt:
         image: "mengbo/docker-dnscrypt-wrapper"
         volumes:
