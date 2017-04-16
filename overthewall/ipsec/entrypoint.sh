@@ -6,13 +6,13 @@ echo "# strongSwan configuration file
 
 charon {
 	load_modular = yes
+	duplicheck.enable = no # 关闭冗余检查
 	dns1 = ${DNS_ADDR_1}
 	dns2 = ${DNS_ADDR_2}
+	nbns1 = ${DNS_ADDR_1} # NBNS (Windows NetBIOS)
+	nbns2 = ${DNS_ADDR_2} # NBNS (Windows NetBIOS)
 	plugins {
 		include strongswan.d/charon/*.conf
-		attr {
-			dns = ${DNS_ADDR_1}, ${DNS_ADDR_2}
-		}
 	}
 }
 
@@ -24,91 +24,46 @@ include strongswan.d/*.conf
 echo "# strongSwan IPsec configuration file
 
 config setup
-	uniqueids = no
+	uniqueids = no # 允许多设备同时在线
+
+conn %default
+	authby = secret
+	lifetime = 24h
+	inactivity = 24h
+	rekey = yes # 过期前重新协商
+	dpdaction = hold
+	dpdtimeout = 300s # IKEv1
+	left = %defaultroute
+	leftsubnet = 0.0.0.0/0
+    leftfirewall = yes
+	right = %any
+	auto = add
 
 conn vpn-ikev2
 	keyexchange = ikev2
 	ikelifetime = 24h
-	lifetime = 24h
-	authby = secret
-	auto = add
-	left = %defaultroute
 	leftid = ${REMOTE_ID}
-	leftsubnet = 0.0.0.0/0
-	right = %any
-	rightsourceip = 10.99.20.0/8
-
-conn vpn-l2tp
-	lifetime = 24h
-	authby = secret
-	auto = add
-	type = transport
-	left = %defaultroute
-	leftprotoport = 17/1701
-	right = %any
-	rightprotoport = 17/%any
+	rightsourceip = 10.99.20.0/16
 
 " > "/etc/ipsec.conf"
 
 
 echo "
-
-[global]
-ipsec saref = yes
-saref refinfo = 30
-
-[lns default]
-ip range = 10.99.30.1-10.99.30.254
-local ip = 10.99.30.0
-require chap = yes
-refuse pap = yes
-require authentication = yes
-pppoptfile = /etc/ppp/xl2tpd-options
-length bit = yes
-
-" > "/etc/xl2tpd/xl2tpd.conf"
-
-
-echo "
-
-require-mschap-v2
-ms-dns ${DNS_ADDR_1}
-ms-dns ${DNS_ADDR_2}
-auth
-mtu 1200
-mru 1000
-crtscts
-hide-password
-modem
-name l2tpd
-proxyarp
-lcp-echo-interval 30
-lcp-echo-failure 4
-
-" > "/etc/ppp/xl2tpd-options"
-
-
-echo "
-: PSK \"${SHARED_SECRET}\"
+: PSK \"${PASSWORD}\"
+: XAUTH \"${PASSWORD}\"
+%any ${USERNAME} : EAP \"${PASSWORD}\"
 " > "/etc/ipsec.secrets"
 
-echo "
-# client	server	secret	IP addresses
-${CLIENT_NAME}	*	${PASSWORD}	*
-" > "/etc/ppp/chap-secrets"
-
 chmod 664 "/etc/ipsec.secrets"
-chmod 664 "/etc/ppp/chap-secrets"
-
-
-mkdir -p "/var/run/xl2tpd"
 
 
 sysctl "net.ipv4.ip_forward=1"
 sysctl "net.ipv6.conf.all.forwarding=1"
 
-iptables -t nat -A POSTROUTING -s 10.99.20.0/8 -o eth0 -j MASQUERADE
-iptables -t nat -A POSTROUTING -s 10.99.30.0/8 -o eth0 -j MASQUERADE
+iptables -t nat -I POSTROUTING -s 10.99.20.0/16 -o eth0 -m policy --dir out --pol ipsec -j ACCEPT
+iptables -t nat -A POSTROUTING -s 10.99.20.0/16 -o eth0 -j MASQUERADE
 
-exec "$@"
+rm -f /var/run/starter.charon.pid
+
+/usr/sbin/ipsec start --nofork
 
