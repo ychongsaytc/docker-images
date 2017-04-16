@@ -21,10 +21,9 @@ services:
         volumes:
             - "./app_dnscrypt/data/:/usr/local/share/dnscrypt-wrapper/"
         environment:
-            LISTEN_ADDRESS: "0.0.0.0"
-            LISTEN_PORT: "5353"
             RESOLVER_ADDRESS: "8.8.8.8"
             RESOLVER_PORT: "53"
+            LISTEN_PORT: "5353"
             PROVIDER_NAME: "2.dnscrypt-cert.example.com"
         network_mode: "host"
         restart: "always"
