@@ -32,6 +32,17 @@ services:
             PROTOCOL: "auth_sha1_v4"
         restart: "always"
 
+    ipsec:
+        build: "./ipsec"
+        environment:
+            USERNAME: "vpn"
+            PASSWORD: "password"
+            DNS_ADDR_1: "8.8.8.8"
+            DNS_ADDR_2: "8.8.4.4"
+        privileged: true
+        network_mode: "host"
+        restart: "always"
+
     dnscrypt:
         image: "mengbo/docker-dnscrypt-wrapper"
         volumes:
@@ -41,17 +52,6 @@ services:
             RESOLVER_PORT: "53"
             LISTEN_PORT: "5353"
             PROVIDER_NAME: "2.dnscrypt-cert.example.com"
-        network_mode: "host"
-        restart: "always"
-
-    ipsec:
-        build: "./ipsec"
-        environment:
-            USERNAME: "vpn"
-            PASSWORD: "password"
-            DNS_ADDR_1: "8.8.8.8"
-            DNS_ADDR_2: "8.8.4.4"
-        privileged: true
         network_mode: "host"
         restart: "always"
 

@@ -12,12 +12,13 @@ ENV WORKERS     10
 
 EXPOSE $SERVER_PORT/tcp $SERVER_PORT/udp
 
-CMD ssserver -s "$SERVER_ADDR"    \
-             -p "$SERVER_PORT"    \
-             -k "$PASSWORD"       \
-             -m "$METHOD"         \
-             -t "$TIMEOUT"        \
-             --workers "$WORKERS" \
-             -q                   \
-             --fast-open
+CMD ssserver \
+	-s "$SERVER_ADDR"    \
+	-p "$SERVER_PORT"    \
+	-k "$PASSWORD"       \
+	-m "$METHOD"         \
+	-t "$TIMEOUT"        \
+	--workers "$WORKERS" \
+	-q                   \
+	--fast-open
 

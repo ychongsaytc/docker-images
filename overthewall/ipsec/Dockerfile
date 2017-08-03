@@ -1,13 +1,12 @@
 
-FROM debian:latest
+FROM debian:jessie
 
 RUN apt-get update && apt-get -y install strongswan iptables && apt-get clean
 
-ADD "./entrypoint.sh" "/entrypoint.sh"
-RUN chmod +x "/entrypoint.sh"
+ADD "./cmd.sh" "/cmd.sh"
+RUN chmod +x "/cmd.sh"
 
 EXPOSE 500/udp 4500/udp
 
-ENTRYPOINT ["/entrypoint.sh"]
-CMD ["/entrypoint.sh"]
+CMD /cmd.sh
 
