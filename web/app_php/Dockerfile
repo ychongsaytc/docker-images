@@ -16,6 +16,7 @@ RUN yum -y install \
 	php70u-json \
 	php70u-xml \
 	php70u-gd \
+	php70u-intl \
 	java-1.8.0-openjdk
 RUN curl -SLk "https://getcomposer.org/composer.phar" > "/usr/local/bin/composer" \
 	&& chmod +x "/usr/local/bin/composer"
