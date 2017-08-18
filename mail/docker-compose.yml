@@ -1,0 +1,18 @@
+
+version: '2'
+services:
+
+    app_server:
+        image: "robbertkl/mail:latest"
+        ports:
+            - "25:25"
+            - "143:143"
+            - "587:587"
+            - "993:993"
+        hostname: "example.com"
+        volumes:
+            - "./server/data/:/data/"
+            - "./server/ssl/:/private/ssl/"
+            - "./server/log/:/var/log/"
+        restart: "always"
+
