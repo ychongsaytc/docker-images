@@ -1,7 +1,7 @@
 
 ## [Web Server](https://github.com/ychongsaytc/docker-images/tree/master/web)
 
-A LNMP server including nginx, PHP-FPM, MySQL, PostgreSQL and MongoDB.
+An LNMP server including nginx, PHP-FPM, MySQL, PostgreSQL and MongoDB.
 
 - [Docker Compose](https://github.com/ychongsaytc/docker-images/blob/master/web/docker-compose.yml)
 
@@ -28,4 +28,11 @@ A LNMP server including nginx, PHP-FPM, MySQL, PostgreSQL and MongoDB.
 [Xunlei Remote Download (迅雷远程下载)](http://yuancheng.xunlei.com/) and Cron job trigger (supports by [devcron](https://pypi.python.org/pypi/devcron)).
 
 - [Docker Compose](https://github.com/ychongsaytc/docker-images/blob/master/nas/docker-compose.yml)
+
+## [Mail Server](https://github.com/ychongsaytc/docker-images/tree/master/mail)
+
+A single-domain mail server, Postfix as MTA (SMTP), Dovecot as LDA (IMAP) + sieve. Based on [robbertkl/mail](https://github.com/robbertkl/docker-mail).
+
+- [Docker Compose](https://github.com/ychongsaytc/docker-images/blob/master/mail/docker-compose.yml)
+
 
