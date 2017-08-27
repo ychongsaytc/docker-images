@@ -3,18 +3,17 @@ version: '2'
 services:
 
     app_nginx:
-        image: "nginx:latest"
+        build: "./app_nginx"
         ports:
             - "80:80"
             - "443:443"
         volumes:
             - "/tmp/:/tmp/"
-            - "./config/nginx/:/etc/nginx/"
+            - "./config/nginx/:/usr/local/openresty/nginx/conf/"
             - "./log/nginx/:/var/log/nginx/"
             - "./www/:/var/www/html/"
         links:
             - "app_php"
-        command: "nginx -g 'daemon off;'"
         restart: "always"
 
     app_php:
@@ -51,5 +50,16 @@ services:
         environment:
             POSTGRES_USER: "root"
             POSTGRES_PASSWORD: "root"
+        restart: "always"
+
+    app_mongo:
+        image: "mongo:latest"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./log/mongo/:/var/log/mongodb/"
+            - "./db/mongo/:/data/db/"
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: "root"
+            MONGO_INITDB_ROOT_PASSWORD: "root"
         restart: "always"
 

@@ -1,9 +1,21 @@
 
 ## [Web Server](https://github.com/ychongsaytc/docker-images/tree/master/web)
 
-A LNMP server including nginx, PHP-FPM, MySQL and PostgreSQL.
+A LNMP server including nginx, PHP-FPM, MySQL, PostgreSQL and MongoDB.
 
 - [Docker Compose](https://github.com/ychongsaytc/docker-images/blob/master/web/docker-compose.yml)
+
+- nginx `ssl_dhparam`
+
+  ```shell
+  $ openssl dhparam -out /volume1/docker/ssl/dhparam.pem 4096
+  ```
+
+- nginx `ssl_session_ticket_key`
+
+  ```shell
+  $ bash web/config/nginx/ssl/session-ticket-key/regenerate.sh
+  ```
 
 ## [Over the Wall](https://github.com/ychongsaytc/docker-images/tree/master/overthewall)
 
