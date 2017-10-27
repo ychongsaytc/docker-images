@@ -8,12 +8,13 @@ services:
             - "8388:8388/tcp"
             - "8388:8388/udp"
         environment:
-            SERVER_ADDR: "0.0.0.0"
-            SERVER_PORT: "8388"
-            PASSWORD: "password"
-            METHOD: "aes-256-cfb"
-            TIMEOUT: 300
-            WORKERS: 10
+            SERVER_ADDR: "0.0.0.0" # 本地服务监听地址
+            SERVER_PORT: "8388"    # 本地服务监听端口
+            PASSWORD: "password"   # 授权密码
+            METHOD: "aes-256-cfb"  # 加密方式
+            TIMEOUT: 300           # 超时限制 (单位: 秒)
+            WORKERS: 10            # 工作进程数量
+        privileged: true
         restart: "always"
 
     shadowsocksr:
@@ -22,36 +23,39 @@ services:
             - "8488:8488/tcp"
             - "8488:8488/udp"
         environment:
-            SERVER_ADDR: "0.0.0.0"
-            SERVER_PORT: "8488"
-            PASSWORD: "password"
-            METHOD: "aes-256-cfb"
-            OBFS: "http_simple"
-            TIMEOUT: 300
-            WORKERS: 10
-            PROTOCOL: "auth_sha1_v4"
+            SERVER_ADDR: "0.0.0.0"   # 本地服务监听地址
+            SERVER_PORT: "8488"      # 本地服务监听端口
+            PASSWORD: "password"     # 授权密码
+            METHOD: "aes-256-cfb"    # 加密方式
+            TIMEOUT: 300             # 超时限制 (单位: 秒)
+            WORKERS: 10              # 工作进程数量
+            PROTOCOL: "auth_sha1_v4" # OBFS 流量混淆方式
+            OBFS: "http_simple"      # 协议
+        privileged: true
         restart: "always"
 
     ipsec:
         build: "./ipsec"
         environment:
-            USERNAME: "vpn"
-            PASSWORD: "password"
-            DNS_ADDR_1: "8.8.8.8"
-            DNS_ADDR_2: "8.8.4.4"
+            USERNAME: "vpn"       # 授权用户名
+            PASSWORD: "password"  # 授权密码
+            DNS_ADDR_1: "8.8.8.8" # 首选 DNS (域名解析) 服务器地址
+            DNS_ADDR_2: "8.8.4.4" # 备用 DNS (域名解析) 服务器地址
         privileged: true
         network_mode: "host"
         restart: "always"
 
     dnscrypt:
         image: "mengbo/docker-dnscrypt-wrapper"
+        ports:
+            - "5353:5353/tcp"
+            - "5353:5353/udp"
         volumes:
-            - "./app_dnscrypt/data/:/usr/local/share/dnscrypt-wrapper/"
+            - "./data/dnscrypt/:/usr/local/share/dnscrypt-wrapper/"
         environment:
-            RESOLVER_ADDRESS: "8.8.8.8"
-            RESOLVER_PORT: "53"
-            LISTEN_PORT: "5353"
-            PROVIDER_NAME: "2.dnscrypt-cert.example.com"
-        network_mode: "host"
+            RESOLVER_ADDRESS: "8.8.8.8"                  # 远程解析服务器地址
+            RESOLVER_PORT: "53"                          # 远程解析服务器端口
+            LISTEN_PORT: "5353"                          # 本地服务监听端口
+            PROVIDER_NAME: "2.dnscrypt-cert.example.com" # 服务提供者名称
         restart: "always"
 
