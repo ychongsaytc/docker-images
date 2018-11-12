@@ -1,7 +1,6 @@
-
 FROM python:2
 
-RUN pip install shadowsocks
+RUN pip install git+https://github.com/shadowsocks/shadowsocks.git@master
 
 ENV SERVER_ADDR 0.0.0.0
 ENV SERVER_PORT 8388
@@ -13,12 +12,11 @@ ENV WORKERS     10
 EXPOSE $SERVER_PORT/tcp $SERVER_PORT/udp
 
 CMD ssserver \
-	-s "$SERVER_ADDR"    \
-	-p "$SERVER_PORT"    \
-	-k "$PASSWORD"       \
-	-m "$METHOD"         \
-	-t "$TIMEOUT"        \
-	--workers "$WORKERS" \
-	-q                   \
-	--fast-open
-
+    -s "$SERVER_ADDR"    \
+    -p "$SERVER_PORT"    \
+    -k "$PASSWORD"       \
+    -m "$METHOD"         \
+    -t "$TIMEOUT"        \
+    --workers "$WORKERS" \
+    -q                   \
+    --fast-open

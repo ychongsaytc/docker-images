@@ -1,4 +1,3 @@
-
 FROM python:2
 
 RUN git clone https://github.com/WooSoftware/shadowsocksr-origin.git /shadowsocksr
@@ -15,13 +14,12 @@ ENV PROTOCOL    auth_sha1_v4
 EXPOSE $SERVER_PORT/tcp $SERVER_PORT/udp
 
 CMD /shadowsocksr/shadowsocks/server.py \
-	-s "$SERVER_ADDR"    \
-	-p "$SERVER_PORT"    \
-	-k "$PASSWORD"       \
-	-m "$METHOD"         \
-	-o "$OBFS"           \
-	-t "$TIMEOUT"        \
-	--workers "$WORKERS" \
-	-O "$PROTOCOL"       \
-	--fast-open
-
+    -s "$SERVER_ADDR"    \
+    -p "$SERVER_PORT"    \
+    -k "$PASSWORD"       \
+    -m "$METHOD"         \
+    -o "$OBFS"           \
+    -t "$TIMEOUT"        \
+    --workers "$WORKERS" \
+    -O "$PROTOCOL"       \
+    --fast-open
