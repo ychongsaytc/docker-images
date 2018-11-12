@@ -63,3 +63,13 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: "root"
         restart: "always"
 
+    app_redis:
+        image: "redis:latest"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/redis/:/usr/local/etc/redis/"
+            - "./log/redis/:/var/log/redis/"
+            - "./db/redis/:/data/"
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+        restart: "always"
+
