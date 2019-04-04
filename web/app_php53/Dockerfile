@@ -1,4 +1,3 @@
-
 FROM centos:6
 
 RUN rpm -U http://ftp.cuhk.edu.hk/pub/linux/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
@@ -21,3 +20,8 @@ RUN yum -y install \
   php-process \
   php-soap \
   php-xml
+
+RUN usermod -u 33 php-fpm && \
+  groupmod -g 33 php-fpm
+
+RUN chown -R php-fpm:php-fpm /var/lib/php/fpm /var/log/php-fpm
