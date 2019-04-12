@@ -31,15 +31,17 @@ services:
         restart: "always"
 
     app_php:
-        build: "./app_php"
+        build: "./app_php71"
         volumes:
             - "/tmp/:/tmp/"
             - "./config/php-fpm/:/etc/php-fpm.d/"
             - "./log/php-fpm/:/var/log/php-fpm/"
             - "./www/:/var/www/html/"
         links:
+            - "app_redis"
             - "app_mysql"
             - "app_postgres"
+            - "app_mongo"
         command: "php-fpm --nodaemonize"
         restart: "always"
 
@@ -52,7 +54,6 @@ services:
             - "./db/redis/:/data/"
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
         restart: "always"
-
 
     app_mysql:
         image: "mysql:latest"
