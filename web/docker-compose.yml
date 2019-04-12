@@ -3,7 +3,21 @@ version: '2'
 services:
 
     app_nginx:
-        build: "./app_nginx"
+        image: "nginx:latest"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/nginx/:/etc/nginx/"
+            - "./log/nginx/:/var/log/nginx/"
+            - "./www/:/var/www/html/"
+        links:
+            - "app_php"
+        restart: "always"
+
+    app_openresty:
+        build: "./app_openresty"
         ports:
             - "80:80"
             - "443:443"
@@ -28,6 +42,17 @@ services:
             - "app_postgres"
         command: "php-fpm --nodaemonize"
         restart: "always"
+
+    app_redis:
+        image: "redis:latest"
+        volumes:
+            - "/tmp/:/tmp/"
+            - "./config/redis/:/usr/local/etc/redis/"
+            - "./log/redis/:/var/log/redis/"
+            - "./db/redis/:/data/"
+        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+        restart: "always"
+
 
     app_mysql:
         image: "mysql:latest"
@@ -62,14 +87,3 @@ services:
             MONGO_INITDB_ROOT_USERNAME: "root"
             MONGO_INITDB_ROOT_PASSWORD: "root"
         restart: "always"
-
-    app_redis:
-        image: "redis:latest"
-        volumes:
-            - "/tmp/:/tmp/"
-            - "./config/redis/:/usr/local/etc/redis/"
-            - "./log/redis/:/var/log/redis/"
-            - "./db/redis/:/data/"
-        command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
-        restart: "always"
-

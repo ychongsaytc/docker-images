@@ -22,10 +22,9 @@ RUN yum -y install \
   php71u-process \
   php71u-opcache
 
-RUN usermod -u 33 php-fpm && \
-  groupmod -g 33 php-fpm
+RUN groupdel tape
+RUN usermod -u 33 php-fpm && groupmod -g 33 php-fpm
 
 RUN chown -R php-fpm:php-fpm /var/lib/php/fpm /var/log/php-fpm
 
-RUN curl -SLk "https://getcomposer.org/composer.phar" > "/usr/local/bin/composer" \
-  && chmod +x "/usr/local/bin/composer"
+RUN curl -SLk "https://getcomposer.org/composer.phar" > "/usr/local/bin/composer" && chmod +x "/usr/local/bin/composer"
