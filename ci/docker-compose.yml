@@ -1,15 +1,16 @@
 version: '3'
 services:
 
-    app_jenkins:
-        image: "jenkins:latest"
+    jenkins:
+        build: "./app_jenkins"
         ports:
             - "8080:8080"
             - "50000:50000"
         volumes:
             - "./data/jenkins/:/var/jenkins_home/"
+        restart: "always"
 
-    app_gitlab:
+    gitlab:
         image: "gitlab/gitlab-ce:latest"
         ports:
             - "22:22"
@@ -32,8 +33,9 @@ services:
                 gitlab_rails['smtp_authentication']       = 'plain'
                 gitlab_rails['smtp_enable_starttls_auto'] = true
                 gitlab_rails['smtp_tls']                  = true
+        restart: "always"
 
-    app_gogs:
+    gogs:
         image: "gogs/gogs:latest"
         ports:
             - "22:22"
@@ -44,7 +46,7 @@ services:
             - "./data/gogs/:/data/"
         restart: "always"
 
-    app_sftp:
+    sftp:
         image: "atmoz/sftp"
         ports:
             - "2223:22"
