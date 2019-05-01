@@ -1,8 +1,7 @@
-
-version: '2'
+version: '3'
 services:
 
-    app_nginx:
+    nginx:
         image: "nginx:latest"
         ports:
             - "80:80"
@@ -13,77 +12,77 @@ services:
             - "./log/nginx/:/var/log/nginx/"
             - "./www/:/var/www/html/"
         links:
-            - "app_php"
+            - "php72"
         restart: "always"
 
-    app_openresty:
+    openresty:
         build: "./app_openresty"
         ports:
             - "80:80"
             - "443:443"
         volumes:
             - "/tmp/:/tmp/"
-            - "./config/nginx/:/usr/local/openresty/nginx/conf/"
-            - "./log/nginx/:/var/log/nginx/"
+            - "./config/openresty/:/usr/local/openresty/nginx/conf/"
+            - "./log/openresty/:/var/log/nginx/"
             - "./www/:/var/www/html/"
         links:
-            - "app_php"
+            - "php72"
         restart: "always"
 
-    app_php:
-        build: "./app_php71"
+    php72:
+        build: "./app_php72"
         volumes:
             - "/tmp/:/tmp/"
             - "./config/php-fpm/:/etc/php-fpm.d/"
             - "./log/php-fpm/:/var/log/php-fpm/"
             - "./www/:/var/www/html/"
         links:
-            - "app_redis"
-            - "app_mysql"
-            - "app_postgres"
-            - "app_mongo"
+            - "redis"
+            - "mysql"
+            - "postgres"
+            - "mongo"
         command: "php-fpm --nodaemonize"
         restart: "always"
 
-    app_redis:
+    redis:
         image: "redis:latest"
         volumes:
             - "/tmp/:/tmp/"
             - "./config/redis/:/usr/local/etc/redis/"
             - "./log/redis/:/var/log/redis/"
-            - "./db/redis/:/data/"
+            - "./data/redis/:/data/"
         command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
         restart: "always"
 
-    app_mysql:
+    mysql:
         image: "mysql:latest"
         volumes:
             - "/tmp/:/tmp/"
             - "./config/mysql/:/etc/mysql/"
             - "./log/mysql/:/var/log/mysql/"
-            - "./db/mysql/:/var/lib/mysql/"
+            - "./data/mysql/:/var/lib/mysql/"
         environment:
             MYSQL_ROOT_PASSWORD: "root"
         restart: "always"
 
-    app_postgres:
+    postgres:
         image: "postgres:latest"
         volumes:
             - "/tmp/:/tmp/"
             - "./config/postgres/:/etc/postgres/"
             - "./log/postgres/:/var/log/postgresql/"
-            - "./db/postgres/data/:/var/lib/postgresql/data/"
+            - "./data/postgres/data/:/var/lib/postgresql/data/"
         environment:
             POSTGRES_USER: "root"
             POSTGRES_PASSWORD: "root"
         restart: "always"
 
-    app_mongo:
+    mongo:
         image: "mongo:latest"
         volumes:
             - "/tmp/:/tmp/"
             - "./log/mongo/:/var/log/mongodb/"
-            - "./db/mongo/:/data/db/"
+            - "./data/mongo/:/data/db/"
         environment:
             MONGO_INITDB_ROOT_USERNAME: "root"
             MONGO_INITDB_ROOT_PASSWORD: "root"

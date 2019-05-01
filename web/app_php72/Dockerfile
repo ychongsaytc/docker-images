@@ -5,25 +5,24 @@ RUN yum -y install openssl curl
 
 RUN curl -SLk "https://setup.ius.io/" | bash
 RUN yum -y install \
-  php71u-cli \
-  php71u-common \
-  php71u-fpm \
-  php71u-mbstring \
-  php71u-mcrypt \
-  php71u-json \
-  php71u-xml \
-  php71u-pdo \
-  php71u-odbc \
-  php71u-mysqlnd \
-  php71u-pgsql \
-  php71u-pecl-mongodb \
-  php71u-pecl-redis \
-  php71u-pecl-memcached \
-  php71u-gd \
-  php71u-intl \
-  php71u-process \
-  php71u-opcache \
-  php71u-ioncube-loader
+  php72u-cli \
+  php72u-common \
+  php72u-fpm \
+  php72u-mbstring \
+  php72u-json \
+  php72u-xml \
+  php72u-pdo \
+  php72u-odbc \
+  php72u-mysqlnd \
+  php72u-pgsql \
+  php72u-pecl-mongodb \
+  php72u-pecl-redis \
+  php72u-pecl-memcached \
+  php72u-gd \
+  php72u-intl \
+  php72u-process \
+  php72u-opcache \
+  php72u-ioncube-loader
 
 RUN usermod -u 233 php-fpm && groupmod -g 233 php-fpm
 

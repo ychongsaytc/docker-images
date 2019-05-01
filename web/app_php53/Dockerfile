@@ -1,7 +1,8 @@
 FROM centos:6
 
-RUN rpm -U http://ftp.cuhk.edu.hk/pub/linux/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN yum clean all && yum -y update
+
+RUN rpm -U http://ftp.cuhk.edu.hk/pub/linux/fedora-epel/6/x86_64/epel-release-6-8.noarch.rpm
 RUN yum -y install \
   php-cli \
   php-fpm \
@@ -21,7 +22,6 @@ RUN yum -y install \
   php-soap \
   php-xml
 
-RUN usermod -u 33 php-fpm && \
-  groupmod -g 33 php-fpm
+RUN usermod -u 233 php-fpm && groupmod -g 233 php-fpm
 
 RUN chown -R php-fpm:php-fpm /var/lib/php/fpm /var/log/php-fpm
